@@ -18,10 +18,11 @@ typedef struct List {
 
 void listInit(List *list, size_t width, void (*destroy)(void *));
 int listAppend(List *list, void *value);
+int listInsert(List *list, void *value, long index);
 int listRemoveAll(List *list);
 int listRemoveAt(List *list, long index);
 Listnode *listIndexAt(List *list, long index);
 
-void listSearch(List *list, void *value);
-void listSort(List *list);
+long listSearch(List *list, void *value);
+void listSort(List *list, void (*compare)(void *, void *));
 #endif
