@@ -94,7 +94,8 @@ int listRemoveAt(List *list, long index) {
 int listDestroy(List *list) { return listRemoveAll(list); }
 
 // test main
-int testmain() {
+/*
+int main() {
   int i;
   List list;
   listInit(&list, sizeof(int), NULL);
@@ -119,4 +120,4 @@ int testmain() {
   printf("length: %ld\n", list.length);
 
   return 0;
-}
+}*/
