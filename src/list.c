@@ -1,6 +1,7 @@
 #include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "file.h"
 
 void listInit(List *list, size_t width, void (*destroy)(void *)) {
   list->head = NULL;
@@ -29,7 +30,7 @@ int listAppend(List *list, void *value) {
     node->next = NULL;
     list->tail->next = node;
     list->tail =
-        node; //�Ȱ�ԭ��node�����ٳ����Ŀռ���nextָ�����ڵ�node,�൱�����������ӹ��ܡ�
+        node; 
     list->length++;
   }
   return 0;
@@ -91,7 +92,7 @@ int listRemoveAt(List *list, long index) {
 }
 
 // test main
-int main() {
+int testmain() {
   int i;
   List list;
   listInit(&list, sizeof(int), NULL);
@@ -114,5 +115,6 @@ int main() {
 
   listRemoveAll(&list);
   printf("length: %ld\n", list.length);
+  
   return 0;
 }
