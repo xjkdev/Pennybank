@@ -28,7 +28,8 @@ int listAppend(List *list, void *value) {
     node->prev = list->tail;
     node->next = NULL;
     list->tail->next = node;
-    list->tail = node;//ÏÈ°ÑÔ­À´nodeËù¿ª±Ù³öÀ´µÄ¿Õ¼äµÄnextÖ¸ÏòÏÖÔÚµÄnode,Ïàµ±ÓÚÁ´±íµÄÁ´½Ó¹¦ÄÜ¡£
+    list->tail =
+        node; //ï¿½È°ï¿½Ô­ï¿½ï¿½nodeï¿½ï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½ï¿½Ä¿Õ¼ï¿½ï¿½ï¿½nextÖ¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½node,ï¿½àµ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½Ü¡ï¿½
     list->length++;
   }
   return 0;
@@ -47,45 +48,42 @@ Listnode *listIndexAt(List *list, long index) {
 }
 
 int listRemoveAll(List *list) {
-  Listnode *current=list->head;
-  while(list->head!=NULL) {
-    current=current->next;
-    free(list->head);
-    list->head=current;
-    list->length--;
+  Listnode *current = list->head;
+  while (current != NULL) {
+    Listnode *next = current->next;
+    if (list->destroy != NULL) {
+      list->destroy(current->value);
+    }
+    free(current);
+    current = next;
   }
+  list->head = NULL;
+  list->length = 0;
   return 1;
 }
 
 int listRemoveAt(List *list, long index) {
-  Listnode *node, *pt,*pf;
-  if(list->length==0)
-    return (-1);
-  node = listIndexAt(list,index);
-  pt=node->prev;
-  pf=listIndexAt(list,index)->next;
-  if(list->destroy != NULL) {
-    list->destroy(listIndexAt(list,index)->value);
-  }
-  
-  if(node == list->head) {
-    
-    list->head = pf;
-  }
-  if(node == list->tail) {
+  Listnode *node;
+  if (list->length == 0 || !(index >= 0 && index < list->length))
+    return -1;
+  node = listIndexAt(list, index);
 
-    free(listIndexAt(list,index));
-    list->length--;
-    list->tail=pt;
+  if (node == list->head) {
+    list->head = node->next;
   }
-  if(pt!=NULL && pf!=NULL) {
-    if(list->destroy != NULL) {
-      list->destroy(listIndexAt(list,index)->value);
-    }
-    free(listIndexAt(list,index));
-    pt->next=pf;
-    pt=pf;
-    list->length--;
+  if (node == list->tail) {
+    list->tail = node->prev;
+  }
+
+  if (node->next != NULL) {
+    node->next->prev = node->prev;
+  }
+  if (node->prev != NULL) {
+    node->prev->next = node->next;
+  }
+
+  if (list->destroy != NULL) {
+    list->destroy(node->value);
   }
   list->length--;
   free(node);
@@ -107,12 +105,14 @@ int main() {
     printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
   }
 
-
-
-  listRemoveAt(&list,4);
-  listRemoveAt(&list,5);
-  printf("%d\n",list.length);
-  for(i=0; i<8; i++)
+  listRemoveAt(&list, 0);
+  listRemoveAt(&list, 4);
+  listRemoveAt(&list, 5);
+  printf("length: %ld\n", list.length);
+  for (i = 0; i < list.length; i++)
     printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
+
+  listRemoveAll(&list);
+  printf("length: %ld\n", list.length);
   return 0;
 }
