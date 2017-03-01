@@ -39,6 +39,6 @@ void chstringInit(chstring *str);
 void chstringChange(chstring *str, char *string, long length);
 void chstringDestroy(chstring *str);
 
-inline stData *voidtostData(void *source);
-inline int *voidtoint(void *source);
+stData *voidtostData(void *source);
+int *voidtoint(void *source);
 #endif

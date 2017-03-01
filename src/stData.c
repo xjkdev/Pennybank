@@ -1,7 +1,7 @@
 #include "stData.h"
 
-inline stData *voidtostData(void *source) { return (stData *)source; }
-inline int *voidtoint(void *source) { return (int *)source; }
+stData *voidtostData(void *source) { return (stData *)source; }
+int *voidtoint(void *source) { return (int *)source; }
 
 DateTime tmToDatatime(struct tm *stdtm) {
   DateTime dt;
