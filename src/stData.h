@@ -33,6 +33,7 @@ typedef struct User {
 } User;
 
 double DecimaltoDouble(const Decimal dnum);
+Decimal DoubletoDecimal(const double dnum);
 
 int DateTimevalid(const DateTime dt);
 DateTime tmToDatetime(struct tm *stdtm);

@@ -14,7 +14,8 @@ DateTime tmToDatetime(struct tm *stdtm) {
   return dt;
 }
 
-double DecimaltoDouble(const Decimal dnum) { return dnum * 100.0; }
+double DecimaltoDouble(const Decimal dnum) { return dnum / 100.0; }
+Decimal DoubletoDecimal(const double dnum) { return (Decimal)(dnum * 100); }
 
 DateTime DateTimeNow() {
   time_t now;

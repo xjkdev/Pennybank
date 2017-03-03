@@ -49,15 +49,15 @@ Listnode *listIndexAt(List *list, long index) {
 }
 
 int listRemoveAll(List *list) {
-  Listnode *current; // This is the current version.
-  while (list->head != NULL) {
-    current = list->head->next;
+  Listnode *current = list->head; // This is the current version.
+  while (current != NULL) {
     if (list->destroy != NULL) {
       list->destroy(current->value);
     }
-    free(list->head);
-    list->head = current;
     list->length--;
+    free(current->value);
+    free(current);
+    current = current->next;
   }
   return 0;
 }
@@ -85,6 +85,7 @@ int listRemoveAt(List *list, long index) {
   if (list->destroy != NULL) {
     list->destroy(node->value);
   }
+  free(node->value);
   list->length--;
   free(node);
   return 1;
@@ -94,6 +95,51 @@ int listDestroy(List *list) { return listRemoveAll(list); }
 
 void nodevalcpy(List *list, void *destiny, Listnode *source) {
   memcpy(destiny, source->value, list->width);
+}
+
+List listSublist(List *list, int begin, int end) {
+  List result;
+  listInit(&result, list->width, list->destroy);
+  Listnode *current = listIndexAt(list, begin);
+  while (current != NULL && begin < end) {
+    void *value = malloc(list->width);
+    if (value == NULL)
+      continue;
+    nodevalcpy(list, value, current);
+    listAppend(&result, value);
+    begin++;
+    current = current->next;
+  }
+  return result;
+}
+
+List listFilter(List *list, int (*filter)(void *)) {
+  List result;
+  listInit(&result, list->width, list->destroy);
+  Listnode *current = list->head;
+  while (current != NULL) {
+    if (filter(current->value)) {
+      void *value = malloc(list->width);
+      if (value == NULL)
+        continue;
+      nodevalcpy(list, value, current);
+      listAppend(&result, value);
+    }
+    current = current->next;
+  }
+  return result;
+}
+
+long listSearch(List *list, int begin, void *value) {
+  Listnode *current = listIndexAt(list, begin);
+  while (current != NULL) {
+    if (memcmp(current->value, value, list->width) == 0) {
+      return begin;
+    }
+    begin++;
+    current = current->next;
+  }
+  return -1;
 }
 
 // test main

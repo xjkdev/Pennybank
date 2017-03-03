@@ -24,9 +24,15 @@ int listRemoveAt(List *list, long index);
 Listnode *listIndexAt(List *list, long index);
 int listDestroy(List *list);
 
+// Return a List that contains elements from begin to end
+// (include begin and NOT include end)
+// elements will be copy in memory
+List listSublist(List *list, int begin, int end);
 // Copy value from source to destiny by width of list
 void nodevalcpy(List *list, void *destiny, Listnode *source);
 
-long listSearch(List *list, void *value);
-void listSort(List *list, void (*compare)(void *, void *));
+long listSearch(List *list, int begin, void *value);
+void listSort(List *list, int (*compare)(void *, void *));
+// Return a List in which all elements' value fit fileter
+List listFilter(List *list, int (*filter)(void *));
 #endif
