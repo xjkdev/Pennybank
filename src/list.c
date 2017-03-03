@@ -48,7 +48,7 @@ Listnode *listIndexAt(List *list, long index) {
 }
 
 int listRemoveAll(List *list) {
-  Listnode *current = list->head;
+ /* Listnode *current = list->head;//This is the previous version 
   while (current != NULL) {
     Listnode *next = current->next;
     if (list->destroy != NULL) {
@@ -60,8 +60,18 @@ int listRemoveAll(List *list) {
   list->head = NULL;
   list->tail = NULL;
   list->length = 0;
-  return 1;
-}
+  return 1;*/
+  Listnode *current;//This is the current version.
+  while(list->head!=NULL){
+       current=list->head->next;
+       if (list->destroy != NULL) {
+      list->destroy(current->value);
+    }
+	   free(list->head);
+       list->head=current;
+       list->length--;
+	}  
+  }
 
 int listRemoveAt(List *list, long index) {
   Listnode *node;
@@ -94,7 +104,7 @@ int listRemoveAt(List *list, long index) {
 int listDestroy(List *list) { return listRemoveAll(list); }
 
 // test main
-/*
+
 int main() {
   int i;
   List list;
@@ -120,4 +130,4 @@ int main() {
   printf("length: %ld\n", list.length);
 
   return 0;
-}*/
+}

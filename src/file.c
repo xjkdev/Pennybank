@@ -36,16 +36,31 @@ int list_fileread(List *list,char *filename) {
     return -1;
   }
  
-    while(1)
-    {  int i;
+    while(feof(fp)==0)
+    {  
     void *value;
     value = malloc(list->width);
-    i=fread(value,list->width,1,fp);
+    fread(value,list->width,1,fp);
     listAppend(list,value);
-    if(i==0)
-      break;
-    } 
+   } 
 }
+
+int list_fileappend(List *list,char *filename,void value){
+	FILE *fp;
+	Listnode *scan=list->head;
+	while(scan!=list->tail)
+	   sacn=scan->next;
+	listAppend(list,value);
+	scan=scan->next;
+    if((fp=fopen("file.bank","a"))==NULL){
+    	fprintf(stderr,"Can't open the file.");
+    	return -1;
+	}
+	fwrite(scan->value,list->width,1,fp);
+	return 0;
+} 
+
+
 int main() {
   char i;
   List list;
