@@ -1,28 +1,32 @@
 // this file is to add file operations interface
+#include "file.h"
+#include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "file.h"
-#include "list.h"
 
-int list_filesave(List *list,char *filename) {
+int list_filesave(List *list, char *filename) {
   Listnode *node = list->head;
   void *buffer;
   void *tmp;
-  buffer=malloc(list->width * list->length);
+  buffer = (void *)malloc(list->width * list->length);
   tmp = buffer;
-  while(node != NULL ) {
-    memcpy(tmp,node->value,list->width);
-    tmp+=list->width;
-    node=node->next;
+  while (node != NULL) {
+    memcpy(tmp, node->value, list->width);
+    tmp += list->width;
+    node = node->next;
   }
   FILE *fp;
-  if((fp=fopen("file.bank","w"))==NULL) {
-    fprintf(stderr,"Can't open the file.");
+  if ((fp = fopen("file.bank", "w")) == NULL) {
+    fprintf(stderr, "Can't open the file.");
     fclose(fp);
     return -1;
   } else {
+<<<<<<< HEAD
     fwrite(buffer,list->width,list->length,fp);
+=======
+    fwrite(buffer, list->length, list->width, fp);
+>>>>>>> cb4a8a88c34b2c8f43629dd7682a0505203a47fc
   }
   fclose(fp);
   free(buffer);
@@ -65,6 +69,7 @@ int main() {
   char i;
   List list;
   listInit(&list, sizeof(char), NULL);
+<<<<<<< HEAD
   /* char *tmpvalue;
    for (i = 'a'; i <= 'z'; i++) {
      tmpvalue = malloc(sizeof(char));
@@ -76,6 +81,14 @@ int main() {
   for (i = 0; i < list.length; i++)
     printf("%c\n", *(char *)(listIndexAt(&list, i)->value));
   printf("%d",list.length);
+=======
+  char *tmpvalue;
+  for (i = 'a'; i <= 'z'; i++) {
+    tmpvalue = (void *)malloc(sizeof(char));
+    *tmpvalue = i;
+    listAppend(&list, tmpvalue);
+  }
+  list_filesave(&list, "file.bank");
+>>>>>>> cb4a8a88c34b2c8f43629dd7682a0505203a47fc
   return 0;
 }
-

@@ -13,7 +13,7 @@ void listInit(List *list, size_t width, void (*destroy)(void *)) {
 
 int listAppend(List *list, void *value) {
   if (list->length == 0) {
-    Listnode *node = malloc(sizeof(Listnode));
+    Listnode *node = (Listnode *)malloc(sizeof(Listnode));
     if (node == NULL)
       return -1;
     node->value = value;
@@ -22,7 +22,7 @@ int listAppend(List *list, void *value) {
     list->head = list->tail = node;
     list->length++;
   } else {
-    Listnode *node = malloc(sizeof(Listnode));
+    Listnode *node = (Listnode *)malloc(sizeof(Listnode));
     if (node == NULL)
       return -1;
     node->value = value;
@@ -111,7 +111,7 @@ int main() {
   listInit(&list, sizeof(int), NULL);
   int *tmpvalue;
   for (i = 0; i < 10; i++) {
-    tmpvalue = malloc(sizeof(int));
+    tmpvalue = (int *)malloc(sizeof(int));
     *tmpvalue = i;
     listAppend(&list, tmpvalue);
   }
