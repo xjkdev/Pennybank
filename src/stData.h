@@ -14,31 +14,30 @@ typedef struct DateTime {
   int second;
 } DateTime;
 
-typedef struct chstring {
-  char *string;
-  long length;
-} chstring;
-
 typedef long Decimal;
 
 typedef struct stData {
-  chstring id;
-  chstring event;
+  long long id;
+  wchar_t event[100];
+  long userid;
   DateTime time;
   Decimal amount;
   Decimal balance;
 } stData;
 
-double DecimaltoDouble(Decimal dnum);
+typedef struct User {
+  char username[25];
+  char password[25];
+  wchar_t nickname[25];
+  long id;
+} User;
 
-int DateTimevalid(DateTime dt);
-DateTime tmToDatatime(struct tm *stdtm);
+double DecimaltoDouble(const Decimal dnum);
+
+int DateTimevalid(const DateTime dt);
+DateTime tmToDatetime(struct tm *stdtm);
 DateTime DateTimeNow();
 
-void chstringInit(chstring *str);
-void chstringChange(chstring *str, char *string, long length);
-void chstringDestroy(chstring *str);
-
-stData *voidtostData(void *source);
-int *voidtoint(void *source);
+stData *voidtostData(const void *source);
+int *voidtoint(const void *source);
 #endif
