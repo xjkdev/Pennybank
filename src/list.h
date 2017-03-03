@@ -24,6 +24,9 @@ int listRemoveAt(List *list, long index);
 Listnode *listIndexAt(List *list, long index);
 int listDestroy(List *list);
 
+// Copy value from source to destiny by width of list
+void nodevalcpy(List *list, void *destiny, Listnode *source);
+
 long listSearch(List *list, void *value);
 void listSort(List *list, void (*compare)(void *, void *));
 #endif

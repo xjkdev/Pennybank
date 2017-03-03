@@ -2,6 +2,7 @@
 #include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void listInit(List *list, size_t width, void (*destroy)(void *)) {
   list->head = NULL;
@@ -48,30 +49,18 @@ Listnode *listIndexAt(List *list, long index) {
 }
 
 int listRemoveAll(List *list) {
- /* Listnode *current = list->head;//This is the previous version 
-  while (current != NULL) {
-    Listnode *next = current->next;
+  Listnode *current; // This is the current version.
+  while (list->head != NULL) {
+    current = list->head->next;
     if (list->destroy != NULL) {
       list->destroy(current->value);
     }
-    free(current);
-    current = next;
+    free(list->head);
+    list->head = current;
+    list->length--;
   }
-  list->head = NULL;
-  list->tail = NULL;
-  list->length = 0;
-  return 1;*/
-  Listnode *current;//This is the current version.
-  while(list->head!=NULL){
-       current=list->head->next;
-       if (list->destroy != NULL) {
-      list->destroy(current->value);
-    }
-	   free(list->head);
-       list->head=current;
-       list->length--;
-	}  
-  }
+  return 0;
+}
 
 int listRemoveAt(List *list, long index) {
   Listnode *node;
@@ -102,6 +91,10 @@ int listRemoveAt(List *list, long index) {
 }
 
 int listDestroy(List *list) { return listRemoveAll(list); }
+
+void nodevalcpy(List *list, void *destiny, Listnode *source) {
+  memcpy(destiny, source->value, list->width);
+}
 
 // test main
 
