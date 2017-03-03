@@ -22,66 +22,48 @@ int list_filesave(List *list, char *filename) {
     fclose(fp);
     return -1;
   } else {
-<<<<<<< HEAD
-    fwrite(buffer,list->width,list->length,fp);
-=======
     fwrite(buffer, list->length, list->width, fp);
->>>>>>> cb4a8a88c34b2c8f43629dd7682a0505203a47fc
   }
   fclose(fp);
   free(buffer);
   return 0;
 }
 
-int list_fileread(List *list,char *filename) {
+int list_fileread(List *list, char *filename) {
   FILE *fp;
-  if((fp=fopen("file.bank","rb"))==NULL) {
-    fprintf(stderr,"Can't open the file.");
+  if ((fp = fopen("file.bank", "rb")) == NULL) {
+    fprintf(stderr, "Can't open the file.");
     return -1;
   }
- 
-    while(feof(fp)==0)
-    {  
+
+  while (feof(fp) == 0) {
     void *value;
     value = malloc(list->width);
-    fread(value,list->width,1,fp);
-    listAppend(list,value);
-   } 
+    fread(value, list->width, 1, fp);
+    listAppend(list, value);
+  }
+  return 0;
 }
 
-int list_fileappend(List *list,char *filename,void value){
-	FILE *fp;
-	Listnode *scan=list->head;
-	while(scan!=list->tail)
-	   sacn=scan->next;
-	listAppend(list,value);
-	scan=scan->next;
-    if((fp=fopen("file.bank","a"))==NULL){
-    	fprintf(stderr,"Can't open the file.");
-    	return -1;
-	}
-	fwrite(scan->value,list->width,1,fp);
-	return 0;
-} 
-
+int list_fileappend(List *list, char *filename, void *value) {
+  FILE *fp;
+  Listnode *scan = list->head;
+  while (scan != list->tail)
+    scan = scan->next;
+  listAppend(list, value);
+  scan = scan->next;
+  if ((fp = fopen("file.bank", "a")) == NULL) {
+    fprintf(stderr, "Can't open the file.");
+    return -1;
+  }
+  fwrite(scan->value, list->width, 1, fp);
+  return 0;
+}
 
 int main() {
   char i;
   List list;
   listInit(&list, sizeof(char), NULL);
-<<<<<<< HEAD
-  /* char *tmpvalue;
-   for (i = 'a'; i <= 'z'; i++) {
-     tmpvalue = malloc(sizeof(char));
-     *tmpvalue = i;
-     listAppend(&list, tmpvalue);
-   }
-   list_filesave(&list,"file.bank");*/
-  list_fileread(&list,"file.bank");
-  for (i = 0; i < list.length; i++)
-    printf("%c\n", *(char *)(listIndexAt(&list, i)->value));
-  printf("%d",list.length);
-=======
   char *tmpvalue;
   for (i = 'a'; i <= 'z'; i++) {
     tmpvalue = (void *)malloc(sizeof(char));
@@ -89,6 +71,5 @@ int main() {
     listAppend(&list, tmpvalue);
   }
   list_filesave(&list, "file.bank");
->>>>>>> cb4a8a88c34b2c8f43629dd7682a0505203a47fc
   return 0;
 }
