@@ -29,6 +29,8 @@ typedef struct User {
   char username[25];
   char password[25];
   wchar_t nickname[25];
+  wchar_t question[50];
+  wchar_t answer[50];
   long id;
 } User;
 

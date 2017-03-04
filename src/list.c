@@ -59,6 +59,7 @@ int listRemoveAll(List *list) {
     free(current);
     current = current->next;
   }
+  listInit(list, list->width, list->destroy);
   return 0;
 }
 
