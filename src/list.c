@@ -37,7 +37,7 @@ int listAppend(List *list, void *value) {
 }
 
 Listnode *listIndexAt(List *list, long index) {
-  if (index < list->length) {
+  if (index < list->length && index > 0) {
     Listnode *current = list->head;
     while (index > 0) {
       current = current->next;
@@ -45,6 +45,14 @@ Listnode *listIndexAt(List *list, long index) {
     }
     return current;
   }
+  if(index < 0) {
+	Listnode *pnow=list->tail;
+	while(index<0){
+	   pnow=pnow->prev;
+	   index++;
+	}
+	return pnow;  
+  }  
   return NULL;
 }
 
