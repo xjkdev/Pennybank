@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 int list_filesave(List *list, char *filename) {
   Listnode *node = list->head;
+  FileHead filehead;
   void *buffer;
   void *tmp;
   buffer = (void *)malloc(list->width * list->length);
@@ -17,11 +17,14 @@ int list_filesave(List *list, char *filename) {
     node = node->next;
   }
   FILE *fp;
-  if ((fp = fopen("file.bank", "w")) == NULL) {
+  if ((fp = fopen("file.bank", "wb")) == NULL) {
     fprintf(stderr, "Can't open the file.");
     fclose(fp);
     return -1;
   } else {
+    filehead.length = list->length;
+    filehead.width = list->width;
+    fwrite(&filehead, sizeof(filehead), 1, fp);
     fwrite(buffer, list->length, list->width, fp);
   }
   fclose(fp);
@@ -31,32 +34,49 @@ int list_filesave(List *list, char *filename) {
 
 int list_fileread(List *list, char *filename) {
   FILE *fp;
+  FileHead fhead;
   if ((fp = fopen("file.bank", "rb")) == NULL) {
     fprintf(stderr, "Can't open the file.");
     return -1;
   }
 
-  while (feof(fp) == 0) {
-    void *value;
-    value = malloc(list->width);
-    fread(value, list->width, 1, fp);
-    listAppend(list, value);
+  while (fread(&fhead, sizeof(FileHead), 1, fp) == 1) {
+    int i;
+    for (i = 0; i < fhead.length; i++) {
+      void *value;
+      value = malloc(fhead.width);
+      fread(value, fhead.width, 1, fp);
+      listAppend(list, value);
+    }
   }
   return 0;
 }
 
-int list_fileappend(List *list, char *filename, void *value) {
-  FILE *fp;
-  Listnode *scan = list->head;
-  while (scan != list->tail)
-    scan = scan->next;
-  listAppend(list, value);
-  scan = scan->next;
-  if ((fp = fopen("file.bank", "a")) == NULL) {
-    fprintf(stderr, "Can't open the file.");
-    return -1;
+int list_fileappend(List *list, char *filename) {
+  Listnode *node = list->head;
+  FileHead filehead;
+  void *buffer;
+  void *tmp;
+  buffer = (void *)malloc(list->width * list->length);
+  tmp = buffer;
+  while (node != NULL) {
+    memcpy(tmp, node->value, list->width);
+    tmp += list->width;
+    node = node->next;
   }
-  fwrite(scan->value, list->width, 1, fp);
+  FILE *fp;
+  if ((fp = fopen("file.bank", "ab")) == NULL) {
+    fprintf(stderr, "Can't open the file.");
+    fclose(fp);
+    return -1;
+  } else {
+    filehead.length = list->length;
+    filehead.width = list->width;
+    fwrite(&filehead, sizeof(filehead), 1, fp);
+    fwrite(buffer, list->length, list->width, fp);
+  }
+  fclose(fp);
+  free(buffer);
   return 0;
 }
 
