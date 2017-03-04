@@ -11,5 +11,4 @@ typedef struct FileHead {
 int list_filesave(List *list, char *filename);
 int list_fileread(List *list, char *filename);
 int list_fileappend(List *list, char *filename, void *value);
-int list_fileexit(char *filename);
 #endif
