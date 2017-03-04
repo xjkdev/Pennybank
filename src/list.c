@@ -153,29 +153,29 @@ long listSearch(List *list, int begin, void *value) {
 
 // test main
 
-int main() {
-  int i;
-  List list;
-  listInit(&list, sizeof(int), NULL);
-  int *tmpvalue;
-  for (i = 0; i < 10; i++) {
-    tmpvalue = (int *)malloc(sizeof(int));
-    *tmpvalue = i;
-    listAppend(&list, tmpvalue);
-  }
-  for (i = 0; i < 10; i++) {
-    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
-  }
-
-  listRemoveAt(&list, 0);
-  listRemoveAt(&list, 4);
-  listRemoveAt(&list, 5);
-  printf("length: %ld\n", list.length);
-  for (i = 0; i < list.length; i++)
-    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
-
-  listRemoveAll(&list);
-  printf("length: %ld\n", list.length);
-
-  return 0;
-}
+//int main() {
+//  int i;
+//  List list;
+//  listInit(&list, sizeof(int), NULL);
+//  int *tmpvalue;
+//  for (i = 0; i < 10; i++) {
+//    tmpvalue = (int *)malloc(sizeof(int));
+//    *tmpvalue = i;
+//    listAppend(&list, tmpvalue);
+//  }
+//  for (i = 0; i < 10; i++) {
+//    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
+//  }
+//
+//  listRemoveAt(&list, 0);
+//  listRemoveAt(&list, 4);
+//  listRemoveAt(&list, 5);
+//  printf("length: %ld\n", list.length);
+//  for (i = 0; i < list.length; i++)
+//    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
+//
+//  listRemoveAll(&list);
+//  printf("length: %ld\n", list.length);
+//
+//  return 0;
+//}
