@@ -1,4 +1,23 @@
 // this file is to add algorithm for search and sort and filter
+<<<<<<< HEAD
+#include <stdio.h>
+#include <stdlib.h>
+#include <lib.h>
+#include <list.h>
+#include <stData.h>
+int  cBalance(List *list,long index){
+	Listnode *node;
+	node=listIndexAt(list,index);
+	Decimal n;
+	n=node->value->amount;
+	node=node->next;
+	while(node!=NULL){
+		node->value->balance-=n;
+		node=node->next;
+	}
+	return 0;  
+}
+=======
 include "stData.h"
 include <stdio.h>
 
@@ -223,3 +242,4 @@ List weekcheck(List * list) {
 
 
 
+>>>>>>> 6bfe7c5ab4c94f8f9729b1600166c573db1369f6

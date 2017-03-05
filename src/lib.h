@@ -2,6 +2,9 @@
 #define LIB_H
 #include "list.h"
 #include "stData.h"
+<<<<<<< HEAD
+void cBalance(List *list,long index);
+=======
 
 typedef struct Check {
     int year;
@@ -26,4 +29,5 @@ int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2);
 int ifleapyear(int y);
 int caculateweekday(int y,int m,int d);
 
+>>>>>>> 6bfe7c5ab4c94f8f9729b1600166c573db1369f6
 #endif
