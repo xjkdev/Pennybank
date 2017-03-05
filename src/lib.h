@@ -6,14 +6,24 @@
 typedef struct Check {
     int year;
     int month;
-    int earn;
-    int expense;
+    Decimal earn;
+    Decimal expense;
 }Check;
+typedef struct Weekcheck {
+    int week;
+    Decimal earn;
+    Decimal expense;
+}Weekcheck;
 int comparebytime(stData * stdata1,stData * stdata2);
 int comparebyid(stData * stdata1,stData * stdata2);
 int comparebyuserid(stData * stdata1,stData * stdata2);
 int comparebyamount(stData * stdata1,stData * stdata2);
 int comparebybalance(stData * stdata1,stData * stdata2);
-void check(List * list);
+List check(List * list);
+List weekcheck(List * list);
+int howmanyweeks(int y1,int m1,int d1,int y2,int m2,int d2);
+int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2);
+int ifleapyear(int y);
+int caculateweekday(int y,int m,int d);
 
 #endif
