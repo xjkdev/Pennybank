@@ -8,7 +8,7 @@ int list_filesave(List *list, char *filename) {
   Listnode *node = list->head;
   FileHead filehead;
   void *buffer;
-  void *tmp;
+  char *tmp; // sizeof char is 1
   buffer = (void *)malloc(list->width * list->length);
   tmp = buffer;
   while (node != NULL) {
@@ -22,9 +22,9 @@ int list_filesave(List *list, char *filename) {
     fclose(fp);
     return -1;
   } else {
-    filehead.length=list->length;
-    filehead.width=list->width;
-    fwrite(&filehead,sizeof(filehead),1,fp);
+    filehead.length = list->length;
+    filehead.width = list->width;
+    fwrite(&filehead, sizeof(filehead), 1, fp);
     fwrite(buffer, list->length, list->width, fp);
   }
   fclose(fp);
@@ -40,12 +40,12 @@ int list_fileread(List *list, char *filename) {
     return -1;
   }
 
-  while (fread(&fhead,sizof(fhead),1,fp)==1) {
+  while (fread(&fhead, sizeof(FileHead), 1, fp) == 1) {
     int i;
-    for(i=0; i<fhead->length; i++) {
+    for (i = 0; i < fhead.length; i++) {
       void *value;
-      value = malloc(fhead->width);
-      fread(value, fhead->width, 1, fp);
+      value = malloc(fhead.width);
+      fread(value, fhead.width, 1, fp);
       listAppend(list, value);
     }
   }
@@ -56,7 +56,7 @@ int list_fileappend(List *list, char *filename) {
   Listnode *node = list->head;
   FileHead filehead;
   void *buffer;
-  void *tmp;
+  char *tmp;
   buffer = (void *)malloc(list->width * list->length);
   tmp = buffer;
   while (node != NULL) {
@@ -70,9 +70,9 @@ int list_fileappend(List *list, char *filename) {
     fclose(fp);
     return -1;
   } else {
-    filehead.length=list->length;
-    filehead.width=list->width;
-    fwrite(&filehead,sizeof(filehead),1,fp);
+    filehead.length = list->length;
+    filehead.width = list->width;
+    fwrite(&filehead, sizeof(filehead), 1, fp);
     fwrite(buffer, list->length, list->width, fp);
   }
   fclose(fp);
@@ -80,16 +80,16 @@ int list_fileappend(List *list, char *filename) {
   return 0;
 }
 
-int main() {
-  char i;
-  List list;
-  listInit(&list, sizeof(char), NULL);
-  char *tmpvalue;
-  for (i = 'a'; i <= 'z'; i++) {
-    tmpvalue = (void *)malloc(sizeof(char));
-    *tmpvalue = i;
-    listAppend(&list, tmpvalue);
-  }
-  list_filesave(&list, "file.bank");
-  return 0;
-}
+//int main() {
+//  char i;
+//  List list;
+//  listInit(&list, sizeof(char), NULL);
+//  char *tmpvalue;
+//  for (i = 'a'; i <= 'z'; i++) {
+//    tmpvalue = (void *)malloc(sizeof(char));
+//    *tmpvalue = i;
+//    listAppend(&list, tmpvalue);
+//  }
+//  list_filesave(&list, "file.bank");
+//  return 0;
+//}

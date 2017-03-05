@@ -45,14 +45,14 @@ Listnode *listIndexAt(List *list, long index) {
     }
     return current;
   }
-  if(index < 0) {
-	Listnode *pnow=list->tail;
-	while(index<0){
-	   pnow=pnow->prev;
-	   index++;
-	}
-	return pnow;  
-  }  
+  if (index < 0) {
+    Listnode *pnow = list->tail;
+    while (index < 0) {
+      pnow = pnow->prev;
+      index++;
+    }
+    return pnow;
+  }
   return NULL;
 }
 
@@ -67,6 +67,7 @@ int listRemoveAll(List *list) {
     free(current);
     current = current->next;
   }
+  listInit(list, list->width, list->destroy);
   return 0;
 }
 
@@ -152,29 +153,29 @@ long listSearch(List *list, int begin, void *value) {
 
 // test main
 
-int main() {
-  int i;
-  List list;
-  listInit(&list, sizeof(int), NULL);
-  int *tmpvalue;
-  for (i = 0; i < 10; i++) {
-    tmpvalue = (int *)malloc(sizeof(int));
-    *tmpvalue = i;
-    listAppend(&list, tmpvalue);
-  }
-  for (i = 0; i < 10; i++) {
-    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
-  }
-
-  listRemoveAt(&list, 0);
-  listRemoveAt(&list, 4);
-  listRemoveAt(&list, 5);
-  printf("length: %ld\n", list.length);
-  for (i = 0; i < list.length; i++)
-    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
-
-  listRemoveAll(&list);
-  printf("length: %ld\n", list.length);
-
-  return 0;
-}
+//int main() {
+//  int i;
+//  List list;
+//  listInit(&list, sizeof(int), NULL);
+//  int *tmpvalue;
+//  for (i = 0; i < 10; i++) {
+//    tmpvalue = (int *)malloc(sizeof(int));
+//    *tmpvalue = i;
+//    listAppend(&list, tmpvalue);
+//  }
+//  for (i = 0; i < 10; i++) {
+//    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
+//  }
+//
+//  listRemoveAt(&list, 0);
+//  listRemoveAt(&list, 4);
+//  listRemoveAt(&list, 5);
+//  printf("length: %ld\n", list.length);
+//  for (i = 0; i < list.length; i++)
+//    printf("%d\n", *(int *)(listIndexAt(&list, i)->value));
+//
+//  listRemoveAll(&list);
+//  printf("length: %ld\n", list.length);
+//
+//  return 0;
+//}
