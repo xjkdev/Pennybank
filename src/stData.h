@@ -24,6 +24,7 @@ typedef struct stData {
   Decimal amount;
   Decimal balance;
 } stData;
+typedef struct stData Record;
 
 typedef struct User {
   char username[25];
