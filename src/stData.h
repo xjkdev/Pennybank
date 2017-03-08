@@ -24,7 +24,7 @@ typedef struct stData {
   Decimal amount;
   Decimal balance;
 } stData;
-typedef struct stData Record;
+typedef stData Record;
 
 typedef struct User {
   char username[25];
@@ -44,4 +44,5 @@ DateTime DateTimeNow();
 
 stData *voidtostData(const void *source);
 int *voidtoint(const void *source);
+User *voidtoUser(const void *source);
 #endif

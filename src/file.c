@@ -17,7 +17,7 @@ int list_filesave(List *list, char *filename) {
     node = node->next;
   }
   FILE *fp;
-  if ((fp = fopen("file.bank", "wb")) == NULL) {
+  if ((fp = fopen(filename, "wb")) == NULL) {
     fprintf(stderr, "Can't open the file.");
     fclose(fp);
     return -1;
@@ -35,7 +35,7 @@ int list_filesave(List *list, char *filename) {
 int list_fileread(List *list, char *filename) {
   FILE *fp;
   FileHead fhead;
-  if ((fp = fopen("file.bank", "rb")) == NULL) {
+  if ((fp = fopen(filename, "rb")) == NULL) {
     fprintf(stderr, "Can't open the file.");
     return -1;
   }
@@ -46,7 +46,10 @@ int list_fileread(List *list, char *filename) {
       void *value;
       value = malloc(fhead.width);
       fread(value, fhead.width, 1, fp);
-      listAppend(list, value);
+      if (fhead.width == list->width)
+        listAppend(list, value);
+      else
+        free(value);
     }
   }
   return 0;
@@ -65,7 +68,7 @@ int list_fileappend(List *list, char *filename) {
     node = node->next;
   }
   FILE *fp;
-  if ((fp = fopen("file.bank", "ab")) == NULL) {
+  if ((fp = fopen(filename, "ab")) == NULL) {
     fprintf(stderr, "Can't open the file.");
     fclose(fp);
     return -1;

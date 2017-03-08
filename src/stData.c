@@ -2,6 +2,7 @@
 
 stData *voidtostData(const void *source) { return (stData *)source; }
 int *voidtoint(const void *source) { return (int *)source; }
+User *voidtoUser(const void *source) { return (User *)source; };
 
 DateTime tmToDatetime(struct tm *stdtm) {
   DateTime dt;

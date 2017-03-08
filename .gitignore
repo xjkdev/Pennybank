@@ -45,3 +45,8 @@ CTestTestfile.cmake
 
 *.bank
 bin/
+
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+Debug/

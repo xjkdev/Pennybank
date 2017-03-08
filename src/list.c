@@ -151,6 +151,22 @@ long listSearch(List *list, int begin, void *value) {
   return -1;
 }
 
+void listSort(List *list, int (*compare)(void *, void *)) {
+    int j;
+    long p;
+    void * tmp;
+    Listnode * current;
+    for (p = 1; p < list->length; p++) {
+        current = listIndexAt(list, p);
+        tmp = current->value;
+        for (j = p; j>0 && compare(current->value, current->prev->value); j--) {
+            current->value = current->prev->value;
+            current = current->prev;
+        }
+        current->value = tmp;
+    }
+}
+
 // test main
 
 //int main() {
