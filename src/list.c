@@ -64,8 +64,9 @@ int listRemoveAll(List *list) {
     }
     list->length--;
     free(current->value);
+    Listnode *tmp = current->next;
     free(current);
-    current = current->next;
+    current = tmp;
   }
   listInit(list, list->width, list->destroy);
   return 0;

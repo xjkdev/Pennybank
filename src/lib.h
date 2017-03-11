@@ -3,30 +3,35 @@
 #include "list.h"
 #include "stData.h"
 
-void cBalance(List *list,long index);
+void updateBalance(List *list,long index);
 
-typedef struct Check {
+typedef struct MonthBalance {
     int year;
     int month;
     Decimal earn;
     Decimal expense;
-}Check;
-typedef struct Weekcheck {
+}MonthBalance;
+typedef struct WeekBalance {
     int week;
     Decimal earn;
     Decimal expense;
-}Weekcheck;
+}WeekBalance;
+
+MonthBalance* voidtoMonthBalance(void*);
+WeekBalance* voidtoWeekBalance(void*);
+
 int comparebytime(stData * stdata1,stData * stdata2);
 int comparebyid(stData * stdata1,stData * stdata2);
 int comparebyuserid(stData * stdata1,stData * stdata2);
 int comparebyamount(stData * stdata1,stData * stdata2);
 int comparebybalance(stData * stdata1,stData * stdata2);
-List check(List * list);
-List weekcheck(List * list);
-int howmanyweeks(int y1,int m1,int d1,int y2,int m2,int d2);
-int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2);
-int ifleapyear(int y);
-int caculateweekday(int y,int m,int d);
+List getMonthBalance(List * list);
+List getWeekBalance(List * list);
 
-char* SelectUserUsername(User *u);
+void setFilterYear(int);
+void setFilterYearMonth(int, int);
+int filterbyYear(Record*);
+int filterbyYearMonth(Record*);
+
+char* getUserUsername(User *u);
 #endif

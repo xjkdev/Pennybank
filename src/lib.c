@@ -4,7 +4,12 @@
 #include <stdlib.h>
 #include "lib.h"
 
-void cBalance(List *list,long index){
+int howmanyweeks(int y1, int m1, int d1, int y2, int m2, int d2);
+int ifthesameweek(int y1, int m1, int d1, int y2, int m2, int d2);
+int ifleapyear(int y);
+int calculateweekday(int y, int m, int d);
+
+void updateBalance(List *list,long index){
 	Listnode *node;
 	node=listIndexAt(list,index);
 	Decimal n;
@@ -16,6 +21,14 @@ void cBalance(List *list,long index){
     }
 }
 
+
+MonthBalance * voidtoMonthBalance(void * source) {
+    return (MonthBalance*)(source);
+}
+
+WeekBalance * voidtoWeekBalance(void * source) {
+    return (WeekBalance*)(source);
+}
 
 //日期排序是从最早的日期开始，最近的日期结束。因为周账单算法的缘故。
 int comparebytime(stData * stdata1,stData * stdata2) {
@@ -57,23 +70,24 @@ int comparebybalance(stData * stdata1,stData * stdata2) {
 
 
 
-List check(List * list) {
+List getMonthBalance(List * list) {
     listSort(list,comparebytime);
     List listcheck;
-    listInit(&listcheck, sizeof(Check), NULL);
-    Check * tmpvalue;
+    listInit(&listcheck, sizeof(MonthBalance), NULL);
+    MonthBalance * tmpvalue;
     Listnode *current = list->head;
     Decimal earnings = 0,expense = 0;
-    long i = list->length;
-    for(;i>0;i--)
+    while(current->next != NULL)
     {
-        if(voidtostData(current->value)->amount > 0) earnings += voidtostData(current->value)->amount;
-        else expense -= voidtostData(current->value)->amount;
+        if(voidtostData(current->value)->amount > 0)
+            earnings += voidtostData(current->value)->amount;
+        else 
+            expense -= voidtostData(current->value)->amount;
         if(voidtostData(current->next->value)->time.year==voidtostData(current->value)->time.year &&
             voidtostData(current->next->value)->time.month==voidtostData(current->value)->time.month)
             current = current->next;
         else {
-            tmpvalue = (Check *)malloc(sizeof(Check));
+            tmpvalue = (MonthBalance *)malloc(sizeof(MonthBalance));
             tmpvalue->year = voidtostData(current->value)->time.year;
             tmpvalue->month = voidtostData(current->value)->time.month;
             tmpvalue->earn = earnings;
@@ -87,7 +101,7 @@ List check(List * list) {
     return listcheck;
 }
 
-int caculateweekday(int y,int m,int d) {
+int calculateweekday(int y,int m,int d) {
 	if(m == 1||m == 2) {
 		m+=12;
 		y--;
@@ -112,8 +126,8 @@ int ifleapyear(int y) {
 }
 
 int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2) {
-    int wd1 = caculateweekday(y1,m1,d1);
-    int wd2 = caculateweekday(y2,m2,d2);
+    int wd1 = calculateweekday(y1,m1,d1);
+    int wd2 = calculateweekday(y2,m2,d2);
     if(y1 == y2 && m1 == m2 && wd2-wd1<=7-wd1) return 1;
     if(y1 == y2 && m1!=m2)
     {
@@ -135,8 +149,8 @@ int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2) {
 }
 
 int howmanyweeks(int y1,int m1,int d1,int y2,int m2,int d2) {
-    int wd1 = caculateweekday(y1,m1,d1);
-    int wd2 = caculateweekday(y2,m2,d2);
+    int wd1 = calculateweekday(y1,m1,d1);
+    int wd2 = calculateweekday(y2,m2,d2);
     if(y1 == y2 && m1 == m2) return (d2-d1-(7-wd1)-wd2)/7;
     if(y1 == y2 && m1 != m2)
     {
@@ -175,16 +189,15 @@ int howmanyweeks(int y1,int m1,int d1,int y2,int m2,int d2) {
     return 0;
 }
 
-List weekcheck(List * list) {
+List getWeekBalance(List * list) {
     listSort(list,comparebytime);
     List listcheck;
-    listInit(&listcheck,sizeof(Weekcheck),NULL);
-    Weekcheck * tmpvalue;
+    listInit(&listcheck,sizeof(WeekBalance),NULL);
+    WeekBalance * tmpvalue;
     Listnode * current = list->head;
     Decimal earnings = 0,expense = 0;
-    long i = list->length;
     int j = 1,k;
-    for(;i>0;i--)
+    while (current->next != NULL)
     {
         Decimal amount = voidtostData(current->value)->amount;
         if(amount > 0) earnings +=amount;
@@ -195,7 +208,7 @@ List weekcheck(List * list) {
         current = current->next;
         else
         {
-            tmpvalue = (Weekcheck *)malloc(sizeof(Weekcheck));
+            tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
             tmpvalue->week = j++;
             tmpvalue->earn = earnings;
             tmpvalue->expense = expense;
@@ -210,7 +223,7 @@ List weekcheck(List * list) {
             {
                 while(k--)
                 {
-                    tmpvalue = (Weekcheck *)malloc(sizeof(Weekcheck));
+                    tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
                     tmpvalue->week = j++;
                     tmpvalue->earn = earnings;
                     tmpvalue->expense = expense;
@@ -223,6 +236,23 @@ List weekcheck(List * list) {
     return listcheck;
 }
 
-char* SelectUserUsername(User *u) {
+char* getUserUsername(User *u) {
     return u->username;
+}
+
+static int filteryear;
+static int filtermonth;
+
+void setFilterYear(int year) {
+    filteryear = year;
+}
+void setFilterYearMonth(int year, int month) {
+    filteryear = year;
+    filtermonth = month;
+}
+int filterbyYear(Record* data) {
+    return (filteryear == data->time.year);
+}
+int filterbyYearMonth(Record* data) {
+    return (filteryear == data->time.year && filtermonth == data->time.month);
 }
