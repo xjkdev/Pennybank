@@ -8,6 +8,7 @@ int howmanyweeks(int y1, int m1, int d1, int y2, int m2, int d2);
 int ifthesameweek(int y1, int m1, int d1, int y2, int m2, int d2);
 int ifleapyear(int y);
 int calculateweekday(int y, int m, int d);
+static int c_string[6][7];
 
 void updateBalance(List *list,long index){
 	Listnode *node;
@@ -234,6 +235,50 @@ List getWeekBalance(List * list) {
         }
     }
     return listcheck;
+}
+
+int  calendar(int year,int month,int a[][7]){
+	  int n=calculateweekday(year,month,1);
+    int i,j;
+    int count=1;
+    int d;
+    if(month==1&&month==3&&month==5&&month==7&&month==8&&month&&month==10&&month==12)
+       d=31;
+    else if(month!=2)
+       d=30;
+    else{
+    	if(year%100==0)
+    	  if(n%400==0)
+    	    d=29;
+    	  else
+    	    d=28;
+    	else
+    	 if(n%4==0)
+    	   d=29;
+    	 else
+    	   d=28;  
+	}
+	for(i=0;(i<6)&&(count<d);i++){
+		for(j=0;j<7;j++){
+			if(i==0){
+				j=n-1;
+				a[i][j]=count;
+			}
+			else{
+			  a[i][j]=count;
+			}
+			count++;
+			if(count>=d)
+			  break;
+		}
+	}
+    for(i=0;i<6;i++){
+    	for(j=0;j<7;j++){
+    		if(a[i][j]==0)
+    		  continue;
+    		printf("%d ",a[i][j]);
+		}
+	}
 }
 
 char* getUserUsername(User *u) {
