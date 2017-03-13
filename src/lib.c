@@ -237,90 +237,70 @@ List getWeekBalance(List * list) {
     return listcheck;
 }
 
-void  calendar(int year,int month,int a[][7]){
+void  calendar(int year,int month,int array[6][7]){
 	int n=calculateweekday(year,month,1);
     int i,j;
     int count=1;
     int d;
     int fmonth=month-1;
-	int a,b;
-	if(month==1&&month==3&&month==5&&month==7&&month==8&&month==10&&month==12)
+	int t,b;
+	if(month==1||month==3||month==5||month==7||month==8||month==10||month==12)
        d=31;
     else if(month!=2)
        d=30;
     else{
-    	if(year%100==0)
-    	  if(n%400==0)
-    	    d=29;
-    	  else
-    	    d=28;
-    	else
-    	 if(n%4==0)
+    	 if((year%4 == 0&& year%100 != 0)||(year%400 == 0))
     	   d=29;
-    	 else
-    	   d=28;  
+    	else
+    	   d=28;
 	}
-	for(i=0;(i<6)&&(count<d);i++){
-		for(j=0;j<7;j++){
-			if(i==0){
-				j=n-1;
-				a[i][j]=count;
-			}
-			else{
-			  a[i][j]=count;
-			}
+	for(i=0;i<6;i++){
+		for(j=i==0?n-1:0;j<7;j++){
+			array[i][j]=count<=d ? count : -(count-d);
 			count++;
-			if(count>=d)
-			  break;
 		}
 	}
     count=1;
-    a=i;
-    b=j;
-    for(i=a;i<6;i++){
-    	if(i==a){
+    t=i;
+	b=j;
+    for(;i<6;i++){
+    	if(i==t){
            for(j=b;j<7;j++)
-		     a[i][j]=-count;
+		     array[i][j]=-count;
 			 count++;		
 		}
 		else {
 			for(j=0;j<7;j++)
-			  a[i][j]=-count;
+			  array[i][j]=-count;
 			  count++;
 		}
 	}
 	
-	if(fmonth==1&&fmonth==3&&fmonth==5&&fmonth==7&&fmonth==8&&fmonth==10&&month==12)
+	if(fmonth==1||fmonth==3||fmonth==5||fmonth==7||fmonth==8||fmonth==10||month==12)
        d=31;
     else if(fmonth!=2)
        d=30;
     else{
-    	if(year%100==0)
-    	  if(n%400==0)
-    	    d=29;
-    	  else
-    	    d=28;
-    	else
-    	 if(n%4==0)
-    	   d=29;
-    	 else
-    	   d=28;  
+        if((year%4 == 0&&year%100 != 0)||(year%400 == 0))
+        d=29;
+        else
+         d=28;
 	}
-	if(fmonth!=0&&a[0][0]!=1){
-		for(j=n-1;j>=0;j--){
-			a[0][j]=-(d--);
+	if(fmonth!=0&&array[0][0]!=1){
+		for(j=n-2;j>=0;j--){
+			array[0][j]=-(d--);
 		}
 	}
 	else{
 		fmonth=12;
 		d=31;
-		for(j=n-1;j>=0;j--){
-			a[0][j]=-(d--);
+		for(j=n-2;j>=0;j--){
+			array[0][j]=-(d--);
 		}
 		
 	}
-
 }
+
 
 char* getUserUsername(User *u) {
     return u->username;
@@ -342,3 +322,16 @@ int filterbyYear(Record* data) {
 int filterbyYearMonth(Record* data) {
     return (filteryear == data->time.year && filtermonth == data->time.month);
 }
+/*int main( ){
+	int array[6][7];
+	int i,j;
+	calendar(2017,2,array);
+	printf("星期日     星期一     星期二     星期三     星期四     星期五     星期六\n");
+	for(i=0;i<6;i++){
+		for(j=0;j<7;j++)
+			printf("%4d       ",array[i][j]);
+	printf("\n");
+	}
+	
+	return 0;
+}*/
