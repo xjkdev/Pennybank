@@ -390,7 +390,7 @@ int filterbyYear(Record* data) {
 int filterbyYearMonth(Record* data) {
     return (filteryear == data->time.year && filtermonth == data->time.month);
 }
-<<<<<<< HEAD
+
 
 // test main
 
@@ -438,7 +438,7 @@ int filterbyYearMonth(Record* data) {
 //	}
 //    return 0;
 //}
-=======
+
 /*int main( ){
 	int array[6][7];
 	int i,j;
@@ -452,4 +452,3 @@ int filterbyYearMonth(Record* data) {
 
 	return 0;
 }*/
->>>>>>> 70861d7741c68f7f6bb3bb0dd3a563194ab296e2
