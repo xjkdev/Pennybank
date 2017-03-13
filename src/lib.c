@@ -376,6 +376,7 @@ char* getUserUsername(User *u) {
 
 static int filteryear;
 static int filtermonth;
+static int filterday;
 
 void setFilterYear(int year) {
     filteryear = year;
@@ -384,13 +385,20 @@ void setFilterYearMonth(int year, int month) {
     filteryear = year;
     filtermonth = month;
 }
+void setFilterYearMonthDay(int year, int month,int day) {
+    filteryear = year;
+    filtermonth = month;
+    filterday = day;
+}
 int filterbyYear(Record* data) {
     return (filteryear == data->time.year);
 }
 int filterbyYearMonth(Record* data) {
     return (filteryear == data->time.year && filtermonth == data->time.month);
 }
-
+int filterbyYearMonthDay(Record* data) {
+    return (filteryear == data->time.year && filtermonth == data->time.month && filterday == data->time.day);
+}
 
 // test main
 

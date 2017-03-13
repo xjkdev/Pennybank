@@ -33,6 +33,6 @@ void setFilterYear(int);
 void setFilterYearMonth(int, int);
 int filterbyYear(Record*);
 int filterbyYearMonth(Record*);
-
+int filterbyYearMonthDay(Record* data);
 char* getUserUsername(User *u);
 #endif
