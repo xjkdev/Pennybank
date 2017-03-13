@@ -305,7 +305,7 @@ List getWeekBalance(List * list) {
     return listcheck;
 }
 
-void  calendar(int year,int month,int array[6][7]){
+void  getcalendar(int year,int month,int array[6][7]){
 	int n=calculateweekday(year,month,1);
     int i,j;
     int count=1;

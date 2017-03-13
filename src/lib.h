@@ -27,6 +27,7 @@ int comparebyamount(stData * stdata1,stData * stdata2);
 int comparebybalance(stData * stdata1,stData * stdata2);
 List getMonthBalance(List * list);
 List getWeekBalance(List * list);
+void  getcalendar(int year, int month, int array[6][7]);
 
 void setFilterYear(int);
 void setFilterYearMonth(int, int);
