@@ -37,7 +37,7 @@ int listAppend(List *list, void *value) {
 }
 
 Listnode *listIndexAt(List *list, long index) {
-  if (index < list->length && index > 0) {
+  if (index < list->length && index >= 0) {
     Listnode *current = list->head;
     while (index > 0) {
       current = current->next;
@@ -45,7 +45,7 @@ Listnode *listIndexAt(List *list, long index) {
     }
     return current;
   }
-  if (index < 0) {
+  else if (index < 0 && (-index) <= list->length) {
     Listnode *pnow = list->tail;
     while (index < 0) {
       pnow = pnow->prev;
@@ -174,6 +174,7 @@ void listSort(List *list, int (*compare)(void *, void *)) {
 //  int i;
 //  List list;
 //  listInit(&list, sizeof(int), NULL);
+//
 //  int *tmpvalue;
 //  for (i = 0; i < 10; i++) {
 //    tmpvalue = (int *)malloc(sizeof(int));
