@@ -335,7 +335,7 @@ void  calendar(int year,int month,int array[6][7]){
     	if(i==t){
            for(j=b;j<7;j++)
 		     array[i][j]=-count;
-			 count++;		
+			 count++;
 		}
 		else {
 			for(j=0;j<7;j++)
@@ -343,7 +343,7 @@ void  calendar(int year,int month,int array[6][7]){
 			  count++;
 		}
 	}
-	
+
 	if(fmonth==1||fmonth==3||fmonth==5||fmonth==7||fmonth==8||fmonth==10||month==12)
        d=31;
     else if(fmonth!=2)
@@ -365,7 +365,7 @@ void  calendar(int year,int month,int array[6][7]){
 		for(j=n-2;j>=0;j--){
 			array[0][j]=-(d--);
 		}
-		
+
 	}
 }
 
@@ -394,50 +394,50 @@ int filterbyYearMonth(Record* data) {
 
 // test main
 
-int main() {
-    int i;
-    List list;
-    listInit(&list, sizeof(stData), NULL);
-    stData *tmpvalue;
-    int d=1;
-    for (i = 1; i <= 12; i++) {
-       tmpvalue = (stData *)malloc(sizeof(stData));
-       tmpvalue->time.year=2012;
-       tmpvalue->time.month=11;                             //按输入形式的话就出错了，目前只能手动改
-       tmpvalue->time.day=d++;
-       tmpvalue->amount=10;
-       listAppend(&list, tmpvalue);
-    }
-	List listcheck = getMonthBalance(&list);
-	Listnode * current1 = listcheck.head;
-    if(current1->next == NULL)
-		printf("%d %d %ld %ld\n",((MonthBalance *)(current1->value))->year,((MonthBalance *)(current1->value))->month,
-		((MonthBalance *)(current1->value))->earn,((MonthBalance *)(current1->value))->expense);
-	else
-	{
-		while(current1 != NULL)
-		{
-			printf("%d %d %ld %ld\n",((MonthBalance *)(current1->value))->year,((MonthBalance *)(current1->value))->month,
-			((MonthBalance *)(current1->value))->earn,((MonthBalance *)(current1->value))->expense);
-			current1 = current1->next;
-		 }
-	 }
-    List weeklistcheck = getWeekBalance(&list);
-	Listnode * current2 = weeklistcheck.head;
-	if(current2->next == NULL)
-		printf("%d %ld %ld\n",((WeekBalance *)(current2->value))->week,
-		((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
-	else
-	{
-		while(current2 != NULL)
-		{
-			printf("%d %d %ld %ld\n",((WeekBalance *)(current2->value))->week,
-			((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
-			current2 = current2->next;
-		}
-	}
-    return 0;
-}
+//int main() {
+//    int i;
+//    List list;
+//    listInit(&list, sizeof(stData), NULL);
+//    stData *tmpvalue;
+//    int d=1;
+//    for (i = 1; i <= 12; i++) {
+//       tmpvalue = (stData *)malloc(sizeof(stData));
+//       tmpvalue->time.year=2012;
+//       tmpvalue->time.month=11;                             //按输入形式的话就出错了，目前只能用手动改的形式
+//       tmpvalue->time.day=d++;
+//       tmpvalue->amount=10;
+//       listAppend(&list, tmpvalue);
+//    }
+//	List listcheck = getMonthBalance(&list);
+//	Listnode * current1 = listcheck.head;
+//    if(current1->next == NULL)
+//		printf("%d %d %ld %ld\n",((MonthBalance *)(current1->value))->year,((MonthBalance *)(current1->value))->month,
+//		((MonthBalance *)(current1->value))->earn,((MonthBalance *)(current1->value))->expense);
+//	else
+//	{
+//		while(current1 != NULL)
+//		{
+//			printf("%d %d %ld %ld\n",((MonthBalance *)(current1->value))->year,((MonthBalance *)(current1->value))->month,
+//			((MonthBalance *)(current1->value))->earn,((MonthBalance *)(current1->value))->expense);
+//			current1 = current1->next;
+//		 }
+//	 }
+//    List weeklistcheck = getWeekBalance(&list);
+//	Listnode * current2 = weeklistcheck.head;
+//	if(current2->next == NULL)
+//		printf("%d %ld %ld\n",((WeekBalance *)(current2->value))->week,
+//		((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
+//	else
+//	{
+//		while(current2 != NULL)
+//		{
+//			printf("%d %d %ld %ld\n",((WeekBalance *)(current2->value))->week,
+//			((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
+//			current2 = current2->next;
+//		}
+//	}
+//    return 0;
+//}
 =======
 /*int main( ){
 	int array[6][7];
@@ -449,7 +449,7 @@ int main() {
 			printf("%4d       ",array[i][j]);
 	printf("\n");
 	}
-	
+
 	return 0;
 }*/
 >>>>>>> 70861d7741c68f7f6bb3bb0dd3a563194ab296e2
