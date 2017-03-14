@@ -19,9 +19,9 @@ double DecimaltoDouble(const Decimal dnum) { return dnum / 100.0; }
 Decimal DoubletoDecimal(const double dnum) { return (Decimal)(dnum * 100); }
 
 DateTime DateTimeNow() {
+    struct tm *stdtm;
   time_t now;
   time(&now);
-  struct tm *stdtm;
   stdtm = localtime(&now);
   return tmToDatetime(stdtm);
 }
