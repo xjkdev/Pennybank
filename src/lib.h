@@ -22,6 +22,8 @@ typedef struct WeekBalance {
 MonthBalance* voidtoMonthBalance(void*);
 WeekBalance* voidtoWeekBalance(void*);
 
+int calculateweekindex(int y, int m, int d);
+
 int comparebytime(stData * stdata1,stData * stdata2);
 int comparebyid(stData * stdata1,stData * stdata2);
 int comparebyuserid(stData * stdata1,stData * stdata2);
@@ -33,6 +35,7 @@ void  getcalendar(int year, int month, int array[6][7]);
 
 void setFilterYear(int);
 void setFilterYearMonth(int, int);
+void setFilterYearMonthDay(int year, int month, int day);
 int filterbyYear(Record*);
 int filterbyYearMonth(Record*);
 int filterbyYearMonthDay(Record* data);

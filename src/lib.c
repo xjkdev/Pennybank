@@ -9,7 +9,7 @@
 int howmanyweeks(int y1, int m1, int d1, int y2, int m2, int d2);
 int isSameWeek(int y1, int m1, int d1, int y2, int m2, int d2);
 int isLeapYear(int y);
-int calculateweekindex(int y, int m, int d);
+
 
 void updateBalance(List *list,long userid){
 	listSort(list,comparebytime);
