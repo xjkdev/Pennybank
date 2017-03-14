@@ -7,24 +7,29 @@
 #include "list.h"
 
 int howmanyweeks(int y1, int m1, int d1, int y2, int m2, int d2);
-int ifthesameweek(int y1, int m1, int d1, int y2, int m2, int d2);
-int ifleapyear(int y);
-int calculateweekday(int y, int m, int d);
- int c_string[6][7];
+int isSameWeek(int y1, int m1, int d1, int y2, int m2, int d2);
+int isLeapYear(int y);
+int calculateweekindex(int y, int m, int d);
 
-void updateBalance(List *list,long index){
-	Listnode *node;
-	Decimal n;
-	node=listIndexAt(list,index);
-
-	n=voidtostData(node->value)->amount;
-	node=node->next;
-    while (node != NULL) {
-        voidtostData(node->value)->balance -= n;
-        node = node->next;
-    }
-}
-
+void updateBalance(List *list,long userid){
+	listSort(list,comparebytime);
+    Listnode *current=list->head;
+    Decimal pre;
+    int flag=1;
+    while(current!=NULL){
+    	if(voidtoUser(current->value)->userid==userid){
+    		if(flag==1){
+    			voidtostData(current->value)->balance=voidtostData(current->value)->amount;
+    			flag=0;
+    			pre=voidtostData(current->value)->balance;
+			}
+			else{
+				voidtostData(current->value)->balance=pre+voidtostData(current->value)->amount;
+				pre=voidtostData(current->value)->balance;
+				}
+		}
+	    current=current->next;
+	}
 
 MonthBalance * voidtoMonthBalance(void * source) {
     return (MonthBalance*)(source);
@@ -131,7 +136,7 @@ List getMonthBalance(List * list) {
     return listcheck;
 }
 
-int calculateweekday(int y,int m,int d) {
+int calculateweekindex(int y,int m,int d) {
 	if(m == 1||m == 2) {
 		m+=12;
 		y--;
@@ -150,22 +155,22 @@ int calculateweekday(int y,int m,int d) {
     return -1;
 }
 
-int ifleapyear(int y) {
+int isLeapYear(int y) {
     if(y%400 == 0 || (y%100 != 0 && y%4 == 0)) return 1;
     else return 0;
 }
 
-int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2) {
-    int wd1 = calculateweekday(y1,m1,d1);
-    int wd2 = calculateweekday(y2,m2,d2);
+int isSameWeek(int y1,int m1,int d1,int y2,int m2,int d2) {
+    int wd1 = calculateweekindex(y1,m1,d1);
+    int wd2 = calculateweekindex(y2,m2,d2);
     if(y1 == y2 && m1 == m2 && d2-d1<=7-wd1) return 1;
     if(y1 == y2 && m1!=m2)
     {
         if(m2-m1>1) return 0;
         if(m1 == 2)
         {
-            if(ifleapyear(y1) && 29-d1+d2<=7-wd1) return 1;
-            if(!ifleapyear(y1) && 28-d1+d2<=7-wd1) return 1;
+            if(isLeapYear(y1) && 29-d1+d2<=7-wd1) return 1;
+            if(!isLeapYear(y1) && 28-d1+d2<=7-wd1) return 1;
         }
         if((m1==1||m1==3||m1==5||m1==7||m1==8||m1==10) && 31-d1+d2<=7-wd1) return 1;
         if((m1==4||m1==6||m1==9||m1==11) && 30-d1+d2<=7-wd1) return 1;
@@ -178,6 +183,7 @@ int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2) {
     return 0;
 }
 
+<<<<<<< HEAD
 void solvesunday(WeekBalance * tmp,int y,int m,int d)
 {
     int wd = calculateweekday(y,m,d);
@@ -186,11 +192,38 @@ void solvesunday(WeekBalance * tmp,int y,int m,int d)
         tmp->year = y;
         tmp->month = m;
         tmp->day = d-wd+1;
+=======
+int howmanyweeks(int y1,int m1,int d1,int y2,int m2,int d2) {
+    int wd1 = calculateweekindex(y1,m1,d1);
+    int wd2 = calculateweekindex(y2,m2,d2);
+    if(y1 == y2 && m1 == m2) return (d2-d1-(7-wd1)-wd2)/7;
+    if(y1 == y2 && m1 != m2)
+    {
+        if(m2-m1 == 1)
+        {
+            if(m1==1||m1==3||m1==5||m1==7||m1==8||m1==10) return (d2+31-d1-(7-wd1)-wd2)/7;
+            if(m1==4||m1==6||m1==9||m1==11) return (d2+31-d1-(7-wd1)-wd2)/7;
+            if(isLeapYear(y1) && m1==2) return (d2+29-d1-(7-wd1)-wd2)/7;
+            if(!isLeapYear(y1) && m1==2) return (d2+28-d1-(7-wd1)-wd2)/7;
+        }
+        if(m2-m1>1)
+        {
+            if(isLeapYear(y1) && m1==1 && (m2==3 || m2==4 || m2==5)) return (30*(m2-m1-1)+31-d1+d2-(7-wd1)-wd2)/7;
+            if(isLeapYear(y1) && m1==1 && m2>5) return (30*(m2-m1-1)+31-d1+d2+7-(7-wd1)-wd2)/7;
+            if(!isLeapYear(y1) && m1==1 && (m2==3 || m2==4 || m2==5 || m2==6 || m2==7)) return (30*(m2-m1-1)+31-d1+d2)/7;
+            if(!isLeapYear(y1) && m1==1 && m2>7) return (30*(m2-m1-1)+31-d1+d2+7-(7-wd1)-wd2)/7;
+            if(isLeapYear(y1) && m1==2) return (29-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
+            if(!isLeapYear(y1) && m1==2) return (28-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
+            if(m1==3 || m1==5 ||m1==7 || m1==8 || m1==10) return (31-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
+            if(m1==4 || m1==6 ||m1==9) return (30-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
+        }
+>>>>>>> b1ebf05a91726964dcf139c5c4773a61579f46c9
     }
     else
     {
         if(m == 1)
         {
+<<<<<<< HEAD
             tmp->year = y-1;
             tmp->month = 12;
             tmp->day = 32-wd+d;
@@ -221,6 +254,10 @@ void solvesunday(WeekBalance * tmp,int y,int m,int d)
                 tmp->month = m-1;
                 tmp->day = 29-wd+d;
             }
+=======
+            if(isLeapYear(y1+i+1)) sum += 366;
+            else sum += 365;
+>>>>>>> b1ebf05a91726964dcf139c5c4773a61579f46c9
         }
     }
 }
@@ -258,10 +295,30 @@ List getWeekBalance(List * list) {
 
         if(current->next != NULL) {
 
+<<<<<<< HEAD
             DateTime currenttime = voidtostData(current->value)->time;
             DateTime nexttime = voidtostData(current->next->value)->time;
             if(ifthesameweek(currenttime.year,currenttime.month,currenttime.day,nexttime.year,nexttime.month,nexttime.day))
             current = current->next;
+=======
+        DateTime currenttime = voidtostData(current->value)->time;
+        DateTime nexttime = voidtostData(current->next->value)->time;
+        if(isSameWeek(currenttime.year,currenttime.month,currenttime.day,nexttime.year,nexttime.month,nexttime.day))
+        current = current->next;
+        else
+        {
+            tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
+            tmpvalue->week = j++;
+            tmpvalue->earn = earnings;
+            tmpvalue->expense = expense;
+            earnings = 0;
+            expense = 0;
+            if((k=howmanyweeks(currenttime.year, currenttime.month, currenttime.day, nexttime.year, nexttime.month, nexttime.day))==0)
+            {
+                listAppend(&listcheck, tmpvalue);
+                current = current->next;
+            }
+>>>>>>> b1ebf05a91726964dcf139c5c4773a61579f46c9
             else
             {
                 tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
@@ -291,33 +348,32 @@ List getWeekBalance(List * list) {
     return listcheck;
 }
 
-void  calendar(int year,int month,int array[6][7]){
-	int n=calculateweekday(year,month,1);
-    int i,j;
+void  getcalendar(int year,int month,int array[6][7]){
+	int n=calculateweekindex(year,month,1);
+    int i,j, t, b;
     int count=1;
-    int d;
-    int fmonth=month-1;
-	int t,b;
+    int daytotal;
+    int prevmonth=month-1;
+
 	if(month==1||month==3||month==5||month==7||month==8||month==10||month==12)
-       d=31;
+       daytotal=31;
     else if(month!=2)
-       d=30;
+       daytotal=30;
     else{
-    	 if((year%4 == 0&& year%100 != 0)||(year%400 == 0))
-    	   d=29;
+    	 if(isLeapYear(year))
+    	   daytotal=29;
     	else
-    	   d=28;
+    	   daytotal=28;
 	}
 	for(i=0;i<6;i++){
 		for(j=i==0?n-1:0;j<7;j++){
-			array[i][j]=count<=d ? count : -(count-d);
+			array[i][j]=count<=daytotal ? count : -(count-daytotal);
 			count++;
 		}
 	}
     count=1;
-    t=i;
 	b=j;
-    for(;i<6;i++){
+    for(t = i;i<6;i++){
     	if(i==t){
            for(j=b;j<7;j++)
 		     array[i][j]=-count;
@@ -330,26 +386,26 @@ void  calendar(int year,int month,int array[6][7]){
 		}
 	}
 
-	if(fmonth==1||fmonth==3||fmonth==5||fmonth==7||fmonth==8||fmonth==10||month==12)
-       d=31;
-    else if(fmonth!=2)
-       d=30;
+	if(prevmonth==1||prevmonth==3||prevmonth==5||prevmonth==7||prevmonth==8||prevmonth==10||month==12)
+       daytotal=31;
+    else if(prevmonth!=2)
+       daytotal=30;
     else{
-        if((year%4 == 0&&year%100 != 0)||(year%400 == 0))
-        d=29;
+        if(isLeapYear(year))
+        daytotal=29;
         else
-         d=28;
+         daytotal=28;
 	}
-	if(fmonth!=0&&array[0][0]!=1){
+	if(prevmonth!=0&&array[0][0]!=1){
 		for(j=n-2;j>=0;j--){
-			array[0][j]=-(d--);
+			array[0][j]=-(daytotal--);
 		}
 	}
 	else{
-		fmonth=12;
-		d=31;
+		prevmonth=12;
+		daytotal=31;
 		for(j=n-2;j>=0;j--){
-			array[0][j]=-(d--);
+			array[0][j]=-(daytotal--);
 		}
 
 	}
@@ -362,6 +418,7 @@ char* getUserUsername(User *u) {
 
 static int filteryear;
 static int filtermonth;
+static int filterday;
 
 void setFilterYear(int year) {
     filteryear = year;
@@ -370,13 +427,24 @@ void setFilterYearMonth(int year, int month) {
     filteryear = year;
     filtermonth = month;
 }
+void setFilterYearMonthDay(int year, int month,int day) {
+    filteryear = year;
+    filtermonth = month;
+    filterday = day;
+}
 int filterbyYear(Record* data) {
     return (filteryear == data->time.year);
 }
 int filterbyYearMonth(Record* data) {
     return (filteryear == data->time.year && filtermonth == data->time.month);
 }
+<<<<<<< HEAD
 
+=======
+int filterbyYearMonthDay(Record* data) {
+    return (filteryear == data->time.year && filtermonth == data->time.month && filterday == data->time.day);
+}
+>>>>>>> b1ebf05a91726964dcf139c5c4773a61579f46c9
 
 // test main
 
@@ -426,6 +494,7 @@ int filterbyYearMonth(Record* data) {
 //}
 
 /*int main( ){
+int c_string[6][7];
 	int array[6][7];
 	int i,j;
 	calendar(2017,2,array);
@@ -438,4 +507,7 @@ int filterbyYearMonth(Record* data) {
 
 	return 0;
 }*/
+<<<<<<< HEAD
 
+=======
+>>>>>>> b1ebf05a91726964dcf139c5c4773a61579f46c9

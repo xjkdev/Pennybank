@@ -3,7 +3,7 @@
 #include "list.h"
 #include "stData.h"
 
-void updateBalance(List *list,long index);
+void updateBalance(List *list,long index,long id);
 
 typedef struct MonthBalance {
     int year;
@@ -29,11 +29,12 @@ int comparebyamount(stData * stdata1,stData * stdata2);
 int comparebybalance(stData * stdata1,stData * stdata2);
 List getMonthBalance(List * list);
 List getWeekBalance(List * list);
+void  getcalendar(int year, int month, int array[6][7]);
 
 void setFilterYear(int);
 void setFilterYearMonth(int, int);
 int filterbyYear(Record*);
 int filterbyYearMonth(Record*);
-
+int filterbyYearMonthDay(Record* data);
 char* getUserUsername(User *u);
 #endif
