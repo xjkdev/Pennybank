@@ -12,7 +12,9 @@ typedef struct MonthBalance {
     Decimal expense;
 }MonthBalance;
 typedef struct WeekBalance {
-    int week;
+    int year;
+    int month;
+    int day;
     Decimal earn;
     Decimal expense;
 }WeekBalance;

@@ -36,39 +36,33 @@ WeekBalance * voidtoWeekBalance(void * source) {
 
 //日期排序是从最早的日期开始，最近的日期结束。因为周账单算法的缘故。
 int comparebytime(stData * stdata1,stData * stdata2) {
-    if(stdata1->time.year > stdata2->time.year) return 0;
-    if(stdata1->time.year < stdata2->time.year) return 1;
-    if(stdata1->time.month > stdata2->time.month) return 0;
-    if(stdata1->time.month < stdata2->time.month) return 1;
-    if(stdata1->time.day > stdata2->time.day) return 0;
-    if(stdata1->time.day < stdata2->time.day) return 1;
-    if(stdata1->time.hour > stdata2->time.hour) return 0;
-    if(stdata1->time.hour < stdata2->time.hour) return 1;
-    if(stdata1->time.minute > stdata2->time.minute) return 0;
-    if(stdata1->time.minute < stdata2->time.minute) return 1;
-    if(stdata1->time.second > stdata2->time.second) return 0;
-    if(stdata1->time.second < stdata1->time.second) return 1;
+    if(stdata1->time.year != stdata2->time.year) return (stdata1->time.year-stdata2->time.year);
+    if(stdata1->time.month != stdata2->time.month) return (stdata1->time.month-stdata2->time.month);
+    if(stdata1->time.day != stdata2->time.day) return (stdata1->time.day-stdata2->time.day);
+    if(stdata1->time.hour != stdata2->time.hour) return (stdata1->time.hour-stdata2->time.hour);
+    if(stdata1->time.minute != stdata2->time.minute) return (stdata1->time.minute-stdata2->time.minute);
+    if(stdata1->time.second != stdata2->time.second) return (stdata1->time.second-stdata2->time.second);
     return 0;
 }
 
 int comparebyid(stData * stdata1,stData * stdata2) {
-    if(stdata1->id > stdata2->id) return 0;
-    else return 1;
+    return (stdata1->id-stdata2->id);
 }
 
 int comparebyuserid(stData * stdata1,stData * stdata2) {
-    if(stdata1->userid > stdata2->userid) return 0;
-    else return 1;
+    return (stdata1->userid-stdata2->userid);
 }
 
 int comparebyamount(stData * stdata1,stData * stdata2) {
-    if(stdata1->amount > stdata2->amount) return 0;
-    else return 1;
+    Decimal a1 = stdata1->amount;
+    Decimal a2 = stdata2->amount;
+    if(a1 < 0) a1 = -a1;
+    if(a2 < 0) a2 = -a2;
+    return (a1-a2);
 }
 
 int comparebybalance(stData * stdata1,stData * stdata2) {
-    if(stdata1->balance > stdata2->balance) return 0;
-    else return 1;
+    return (stdata1->balance-stdata2->balance);
 }
 
 
@@ -184,45 +178,51 @@ int ifthesameweek(int y1,int m1,int d1,int y2,int m2,int d2) {
     return 0;
 }
 
-int howmanyweeks(int y1,int m1,int d1,int y2,int m2,int d2) {
-    int wd1 = calculateweekday(y1,m1,d1);
-    int wd2 = calculateweekday(y2,m2,d2);
-    if(y1 == y2 && m1 == m2) return (d2-d1-(7-wd1)-wd2)/7;
-    if(y1 == y2 && m1 != m2)
+void solvesunday(WeekBalance * tmp,int y,int m,int d)
+{
+    int wd = calculateweekday(y,m,d);
+    if(d >= wd)
     {
-        if(m2-m1 == 1)
+        tmp->year = y;
+        tmp->month = m;
+        tmp->day = d-wd+1;
+    }
+    else
+    {
+        if(m == 1)
         {
-            if(m1==1||m1==3||m1==5||m1==7||m1==8||m1==10) return (d2+31-d1-(7-wd1)-wd2)/7;
-            if(m1==4||m1==6||m1==9||m1==11) return (d2+31-d1-(7-wd1)-wd2)/7;
-            if(ifleapyear(y1) && m1==2) return (d2+29-d1-(7-wd1)-wd2)/7;
-            if(!ifleapyear(y1) && m1==2) return (d2+28-d1-(7-wd1)-wd2)/7;
+            tmp->year = y-1;
+            tmp->month = 12;
+            tmp->day = 32-wd+d;
         }
-        if(m2-m1>1)
+        else
         {
-            if(ifleapyear(y1) && m1==1 && (m2==3 || m2==4 || m2==5)) return (30*(m2-m1-1)+31-d1+d2-(7-wd1)-wd2)/7;
-            if(ifleapyear(y1) && m1==1 && m2>5) return (30*(m2-m1-1)+31-d1+d2+7-(7-wd1)-wd2)/7;
-            if(!ifleapyear(y1) && m1==1 && (m2==3 || m2==4 || m2==5 || m2==6 || m2==7)) return (30*(m2-m1-1)+31-d1+d2)/7;
-            if(!ifleapyear(y1) && m1==1 && m2>7) return (30*(m2-m1-1)+31-d1+d2+7-(7-wd1)-wd2)/7;
-            if(ifleapyear(y1) && m1==2) return (29-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
-            if(!ifleapyear(y1) && m1==2) return (28-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
-            if(m1==3 || m1==5 ||m1==7 || m1==8 || m1==10) return (31-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
-            if(m1==4 || m1==6 ||m1==9) return (30-m1+m2+(m2-m1-1)*30-(7-wd1)-wd2+7)/7;
+            if(m==2 || m==4 || m==6 || m==8 || m==9 || m==11)
+            {
+                tmp->year = y;
+                tmp->month = m-1;
+                tmp->day = 32-wd+d;
+            }
+            else if(m==5 || m==7 || m==10 || m==12)
+            {
+                tmp->year = y;
+                tmp->month = m-1;
+                tmp->day = 31-wd+d;
+            }
+            else if(ifleapyear(y))
+            {
+                tmp->year = y;
+                tmp->month = m-1;
+                tmp->day = 30-wd+d;
+            }
+            else
+            {
+                tmp->year = y;
+                tmp->month = m-1;
+                tmp->day = 29-wd+d;
+            }
         }
     }
-    if(y1!=y2)
-    {
-        int i = y2-y1-1,sum = 0;
-        while(i--)
-        {
-            if(ifleapyear(y1+i+1)) sum += 366;
-            else sum += 365;
-        }
-        if((12-m1+m2-1)%2 == 0) sum += (12-m1+m2-1)/2*31+(12-m1+m2-1)/2*30;
-        else sum += (12-m1+m2-1)/2*30+((12-m1+m2-1)/2+1)*31;
-        sum += 31-d1+d2-(7-wd1)-wd2;
-        return sum/7;
-    }
-    return 0;
 }
 
 List getWeekBalance(List * list) {
@@ -239,8 +239,9 @@ List getWeekBalance(List * list) {
         Decimal amount = voidtostData(current->value)->amount;
         if(amount > 0) earnings +=amount;
         else expense -= amount;
+        DateTime currenttime = voidtostData(current->value)->time;
         tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
-        tmpvalue->week = j++;
+        solvesunday(tmpvalue,currenttime.year,currenttime.month,currenttime.day);
         tmpvalue->earn = earnings;
         tmpvalue->expense = expense;
         listAppend(&listcheck, tmpvalue);
@@ -257,41 +258,26 @@ List getWeekBalance(List * list) {
 
         if(current->next != NULL) {
 
-        DateTime currenttime = voidtostData(current->value)->time;
-        DateTime nexttime = voidtostData(current->next->value)->time;
-        if(ifthesameweek(currenttime.year,currenttime.month,currenttime.day,nexttime.year,nexttime.month,nexttime.day))
-        current = current->next;
-        else
-        {
-            tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
-            tmpvalue->week = j++;
-            tmpvalue->earn = earnings;
-            tmpvalue->expense = expense;
-            earnings = 0;
-            expense = 0;
-            if((k=howmanyweeks(currenttime.year, currenttime.month, currenttime.day, nexttime.year, nexttime.month, nexttime.day))==0)
-            {
-                listAppend(&listcheck, tmpvalue);
-                current = current->next;
-            }
+            DateTime currenttime = voidtostData(current->value)->time;
+            DateTime nexttime = voidtostData(current->next->value)->time;
+            if(ifthesameweek(currenttime.year,currenttime.month,currenttime.day,nexttime.year,nexttime.month,nexttime.day))
+            current = current->next;
             else
             {
+                tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
+                solvesunday(tmpvalue,currenttime.year,currenttime.month,currenttime.day);
+                tmpvalue->earn = earnings;
+                tmpvalue->expense = expense;
+                earnings = 0;
+                expense = 0;
                 listAppend(&listcheck, tmpvalue);
                 current = current->next;
-                while(k--)
-                {
-                    tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
-                    tmpvalue->week = j++;
-                    tmpvalue->earn = earnings;
-                    tmpvalue->expense = expense;
-                    listAppend(&listcheck, tmpvalue);
-                }
             }
-        }
         }
         else {
             tmpvalue = (WeekBalance *)malloc(sizeof(WeekBalance));
-            tmpvalue->week = j++;
+            DateTime currenttime = voidtostData(current->value)->time;
+            solvesunday(tmpvalue,currenttime.year,currenttime.month,currenttime.day);
             tmpvalue->earn = earnings;
             tmpvalue->expense = expense;
             earnings = 0;
@@ -390,7 +376,7 @@ int filterbyYear(Record* data) {
 int filterbyYearMonth(Record* data) {
     return (filteryear == data->time.year && filtermonth == data->time.month);
 }
-<<<<<<< HEAD
+
 
 // test main
 
@@ -399,12 +385,12 @@ int filterbyYearMonth(Record* data) {
 //    List list;
 //    listInit(&list, sizeof(stData), NULL);
 //    stData *tmpvalue;
-//    int d=1;
-//    for (i = 1; i <= 12; i++) {
+//    int d=2012;
+//    for (i = 1; i <= 6; i++) {
 //       tmpvalue = (stData *)malloc(sizeof(stData));
-//       tmpvalue->time.year=2012;
+//       tmpvalue->time.year=d++;
 //       tmpvalue->time.month=11;                             //按输入形式的话就出错了，目前只能用手动改的形式
-//       tmpvalue->time.day=d++;
+//       tmpvalue->time.day=8;
 //       tmpvalue->amount=10;
 //       listAppend(&list, tmpvalue);
 //    }
@@ -425,20 +411,20 @@ int filterbyYearMonth(Record* data) {
 //    List weeklistcheck = getWeekBalance(&list);
 //	Listnode * current2 = weeklistcheck.head;
 //	if(current2->next == NULL)
-//		printf("%d %ld %ld\n",((WeekBalance *)(current2->value))->week,
-//		((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
+//		printf("%d %d %d %ld %ld\n",((WeekBalance *)(current2->value))->year,((WeekBalance *)(current2->value))->month,
+//         ((WeekBalance *)(current2->value))->day,((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
 //	else
 //	{
 //		while(current2 != NULL)
 //		{
-//			printf("%d %d %ld %ld\n",((WeekBalance *)(current2->value))->week,
-//			((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
+//			printf("%d %d %d %ld %ld\n",((WeekBalance *)(current2->value))->year,((WeekBalance *)(current2->value))->month,
+//            ((WeekBalance *)(current2->value))->day,((WeekBalance *)(current2->value))->earn,((WeekBalance *)(current2->value))->expense);
 //			current2 = current2->next;
 //		}
 //	}
 //    return 0;
 //}
-=======
+
 /*int main( ){
 	int array[6][7];
 	int i,j;
@@ -452,4 +438,4 @@ int filterbyYearMonth(Record* data) {
 
 	return 0;
 }*/
->>>>>>> 70861d7741c68f7f6bb3bb0dd3a563194ab296e2
+
