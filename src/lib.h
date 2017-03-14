@@ -3,7 +3,7 @@
 #include "list.h"
 #include "stData.h"
 
-void updateBalance(List *list,long index,long id);
+void updateBalance(List *list, long userid);
 
 typedef struct MonthBalance {
     int year;
@@ -11,6 +11,7 @@ typedef struct MonthBalance {
     Decimal earn;
     Decimal expense;
 }MonthBalance;
+
 typedef struct WeekBalance {
     int year;
     int month;
