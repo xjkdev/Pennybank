@@ -10,16 +10,25 @@ int ifleapyear(int y);
 int calculateweekday(int y, int m, int d);
  int c_string[6][7];
 
-void updateBalance(List *list,long index){
-	Listnode *node;
-	node=listIndexAt(list,index);
-	Decimal n;
-	n=voidtostData(node->value)->amount;
-	node=node->next;
-    while (node != NULL) {
-        voidtostData(node->value)->balance -= n;
-        node = node->next;
-    }
+void updateBalance(List *list,long userid){
+	listSort(list,comparebytime);
+    Listnode *current=list->head;
+    Decimal pre;
+    int flag=1;
+    while(current!=NULL){
+    	if(voidtoUser(current->value)->userid==userid){
+    		if(flag==1){
+    			voidtostData(current->value)->balance=voidtostData(current->value)->amount;
+    			flag=0;
+    			pre=voidtostData(current->value)->balance;
+			}
+			else{
+				voidtostData(current->value)->balance=pre+voidtostData(current->value)->amount;
+				pre=voidtostData(current->value)->balance;
+				}
+		}
+	    current=current->next;
+	}
 }
 
 
