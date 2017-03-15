@@ -3,7 +3,6 @@
 stData *voidtostData(const void *source) { return (stData *)source; }
 int *voidtoint(const void *source) { return (int *)source; }
 User *voidtoUser(const void *source) { return (User *)source; };
-Cordinate *voidtoCoordinate(const void *source){return (Coordinate *)source};
 
 DateTime tmToDatetime(struct tm *stdtm) {
   DateTime dt;
@@ -20,7 +19,7 @@ double DecimaltoDouble(const Decimal dnum) { return dnum / 100.0; }
 Decimal DoubletoDecimal(const double dnum) { return (Decimal)(dnum * 100); }
 
 DateTime DateTimeNow() {
-    struct tm *stdtm;
+  struct tm *stdtm;
   time_t now;
   time(&now);
   stdtm = localtime(&now);
