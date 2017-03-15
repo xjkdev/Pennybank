@@ -188,10 +188,7 @@ int calculateweekindex(int y, int m, int d) {
 }
 
 int isLeapYear(int y) {
-  if (y % 400 == 0 || (y % 100 != 0 && y % 4 == 0))
-    return 1;
-  else
-    return 0;
+    return (y % 400 == 0 || (y % 100 != 0 && y % 4 == 0));
 }
 
 int isSameWeek(int y1, int m1, int d1, int y2, int m2, int d2) {
@@ -409,6 +406,23 @@ int filterbyYearMonth(Record *data) {
 int filterbyYearMonthDay(Record *data) {
   return (filteryear == data->time.year && filtermonth == data->time.month &&
           filterday == data->time.day);
+}
+
+long ADdays(int year, int month, int day) {
+    long ret = 0;
+    int months[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+    if (isLeapYear(year))
+        months[2] = 29;
+    for (; day>1; day--) {
+        ret++;
+    }
+    for (month -= 1; month >= 1; month--) {
+        ret += months[month];
+    }
+    for (year -= 1; year >= 1; year--) {
+        ret += (isLeapYear(year)) ? 366 : 365;
+    }
+    return ret;
 }
 
 // test main
