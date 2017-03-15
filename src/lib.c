@@ -11,6 +11,27 @@ int isSameWeek(int y1, int m1, int d1, int y2, int m2, int d2);
 int isLeapYear(int y);
 int calculateweekindex(int y, int m, int d);
 
+float regression(List *list,int x){
+	float sumx,sumy,sumx_2,sumxy;
+	long n;
+	float b;
+	float a;
+	float now;
+	Listnode *current=list->head;
+	sumx=sumy=sumx_2=sumxy=0;
+	while(current!=NULL){
+	  	sumx+=voidtoCoordinate(current->value)->x;
+	  	sumy+=voidtoCoordinate(current->value)->y;
+	  	sumxy+=voidtoCoordinate(current->value)->x*voidtoCoordinate(current->value)->y;
+		sumx_2+=voidtoCoordinate(current->value)->x*voidtoCoordinate(current->value)->x;
+		n++;
+		current=current->next; 
+	}
+	b=(sumxy-n*(sumx/n)*(sumy/n))/(sumx_2-n*(sumx/n)*(sumx/n));
+	a=sumy/n-b*(sumx/n);
+	now=b*x+a;
+	return now; 	
+}
 void updateBalance(List *list,long userid){
 	listSort(list,comparebytime);
     Listnode *current=list->head;

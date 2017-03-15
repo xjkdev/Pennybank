@@ -16,7 +16,10 @@ typedef struct WeekBalance {
     Decimal earn;
     Decimal expense;
 }WeekBalance;
-
+typedef struct coordinate{
+	float x;
+	float y;
+}Coordinate;
 MonthBalance* voidtoMonthBalance(void*);
 WeekBalance* voidtoWeekBalance(void*);
 
