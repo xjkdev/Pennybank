@@ -160,16 +160,14 @@ void listSort(List *list, int (*compare)(void *, void *)) {
     for (p = 1; p < list->length; p++) {
         current = listIndexAt(list, p);
         tmp = current->value;
-        for (j = p; j>0 && compare(current->value, current->prev->value); j--) {
+        for (; current->prev != NULL && compare(tmp, current->prev->value)<0; current = current->prev ) {
             current->value = current->prev->value;
-            current = current->prev;
         }
         current->value = tmp;
     }
 }
 
 // test main
-
 //int main() {
 //  int i;
 //  List list;
@@ -197,3 +195,4 @@ void listSort(List *list, int (*compare)(void *, void *)) {
 //
 //  return 0;
 //}
+
