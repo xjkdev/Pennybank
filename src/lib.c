@@ -12,12 +12,12 @@ int isSameWeek(int y1, int m1, int d1, int y2, int m2, int d2);
 int isLeapYear(int y);
 
 
-float regression(List *list,int x){
-	float sumx,sumy,sumx_2,sumxy;
+double regression(List *list,int x){
+	double sumx,sumy,sumx_2,sumxy;
 	long n;
-	float b;
-	float a;
-	float now;
+	double b;
+	double a;
+	double now;
 	Listnode *current=list->head;
 	sumx=sumy=sumx_2=sumxy=0;
 	while(current!=NULL){
